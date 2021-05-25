@@ -1,0 +1,25 @@
+---
+title: "test"
+author: "Evgeniia Golovina"
+date: "25/05/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, results="hide")
+```
+
+## Calculate meadian
+
+```{r meadian}
+library(dplyr)
+setwd("/Users/foffa/Desktop/eqtl")
+geuvadis=gzfile('GEUVADIS.445_samples.rnaseqc_tpm.gct.gz','rt')
+df <- read.csv(geuvadis, sep = "\t")
+#df %>% select(tail(names(.), 445))
+sub_genes <- df[head(names(df), 2)]
+sub <- df[tail(names(df), 445)]
+sub_genes$median = apply(sub, 1, median, na.rm=T)
+write.table(sub_genes, file='GEUVADIS.445_samples.rnaseqc_meadian_tpm.gct', row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE)
+```
+
