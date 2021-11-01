@@ -14,12 +14,14 @@ knitr::opts_chunk$set(echo = TRUE, results="hide")
 ```{r meadian}
 library(dplyr)
 setwd("/Users/foffa/Desktop/eqtl")
-geuvadis=gzfile('GEUVADIS.445_samples.rnaseqc_tpm.gct.gz','rt')
-df <- read.csv(geuvadis, sep = "\t")
-#df %>% select(tail(names(.), 445))
+dataset=gzfile('combined_CD4_NAIVE.gene_tpm.gct.gz','rt')
+#df <- read.table(dataset, header = TRUE, sep = "\t")
+# remove the first two lines and gzip the files
+df <- read.csv(dataset, sep = "\t")
 sub_genes <- df[head(names(df), 2)]
-sub <- df[tail(names(df), 445)]
+sub <- df[tail(names(df), 88)] # replace with the number of samples
 sub_genes$median = apply(sub, 1, median, na.rm=T)
-write.table(sub_genes, file='GEUVADIS.445_samples.rnaseqc_meadian_tpm.gct', row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE)
+write.table(sub_genes, file='dice.CD4_NAIVE.88_samples.rnaseqc_meadian_tpm.gct', row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE)
+# add removed the first two lines, modify the number of tissues in database and gzip the file.
 ```
 
