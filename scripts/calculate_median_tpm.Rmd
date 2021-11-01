@@ -14,14 +14,39 @@ knitr::opts_chunk$set(echo = TRUE, results="hide")
 ```{r meadian}
 library(dplyr)
 setwd("/Users/foffa/Desktop/eqtl")
-dataset=gzfile('combined_CD4_NAIVE.gene_tpm.gct.gz','rt')
+dataset=gzfile('combined_TREG_NAIVE.gene_tpm.gct.gz','rt')
 #df <- read.table(dataset, header = TRUE, sep = "\t")
 # remove the first two lines and gzip the files
 df <- read.csv(dataset, sep = "\t")
 sub_genes <- df[head(names(df), 2)]
-sub <- df[tail(names(df), 88)] # replace with the number of samples
-sub_genes$median = apply(sub, 1, median, na.rm=T)
-write.table(sub_genes, file='dice.CD4_NAIVE.88_samples.rnaseqc_meadian_tpm.gct', row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE)
+sub <- df[tail(names(df), 89)] # replace with the number of samples
+sub_genes$TREG_NAIVE = apply(sub, 1, median, na.rm=T) # name the column according to tissue/cell name
+write.table(sub_genes, file='dice.TREG_NAIVE.89_samples.rnaseqc_meadian_tpm.gct', row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE)
 # add removed the first two lines, modify the number of tissues in database and gzip the file.
+
+### combining all 15 sell types into one file accroding to gene IDs
+B_NAIVE <- sub_genes
+CD4_NAIVE <- sub_genes
+CD4_N_STIM <- sub_genes
+CD8_NAIVE <- sub_genes
+CD8_N_STIM <- sub_genes
+CLASSICAL_MONOCYTES <- sub_genes
+NK_CD16POS <- sub_genes
+NONCLASSICAL_MONOCYTES <- sub_genes
+TFH <- sub_genes
+TH1_17 <- sub_genes
+TH1 <- sub_genes
+TH17 <- sub_genes
+TH2 <- sub_genes
+TREG_MEMORY <- sub_genes
+TREG_NAIVE <- sub_genes
+
+genes <- df[head(names(df), 2)]
+lst <- list(B_NAIVE, CD4_NAIVE, CD4_N_STIM, CD8_NAIVE, CD8_N_STIM, CLASSICAL_MONOCYTES, NK_CD16POS,
+            NONCLASSICAL_MONOCYTES, TFH, TH1_17, TH1, TH17, TH2, TREG_MEMORY, TREG_NAIVE)
+
+library(tidyverse)
+comb <- reduce(lst, full_join, by = c("Name", "Description"))
+write.table(sub_genes, file='dice.15_cell_lines.rnaseqc_meadian_tpm.gct', row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE)
 ```
 
