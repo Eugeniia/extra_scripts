@@ -48,4 +48,5 @@ lst <- list(B_NAIVE, CD4_NAIVE, CD4_N_STIM, CD8_NAIVE, CD8_N_STIM, CLASSICAL_MON
 library(tidyverse)
 comb <- reduce(lst, full_join, by = c("Name", "Description"))
 write.table(comb, file='dice.15_cell_lines.rnaseqc_meadian_tpm.gct', row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE)
+# add removed the first two lines, modify the number of tissues in database and gzip the file.
 ```
